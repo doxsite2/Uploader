@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Paste to Pastebin</title>
+  <meta charset="UTF-8">
+  <title>Pastebin TXT Uploader</title>
   <style>
     body {
       background-color: #121212;
@@ -25,34 +25,29 @@
     }
     #result {
       margin-top: 20px;
-      word-break: break-word;
     }
   </style>
 </head>
 <body>
-  <h2>Paste to Pastebin (TXT Only)</h2>
-  <textarea id="pasteContent" placeholder="Enter your text here..."></textarea>
-  <input type="text" id="pasteTitle" placeholder="Paste title (optional)" />
-  <button onclick="submitPaste()">Submit Paste</button>
+  <h2>Paste .txt to Pastebin</h2>
+  <form id="pasteForm">
+    <textarea name="text" placeholder="Enter .txt content..." required></textarea>
+    <input type="text" name="title" placeholder="Title (optional)">
+    <button type="submit">Create Paste</button>
+  </form>
   <div id="result"></div>
 
   <script>
-    async function submitPaste() {
-      const text = document.getElementById("pasteContent").value;
-      const title = document.getElementById("pasteTitle").value;
-
-      const formData = new FormData();
-      formData.append("text", text);
-      formData.append("title", title);
-
-      const res = await fetch("paste.php", {
-        method: "POST",
+    document.getElementById('pasteForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const response = await fetch('paste.php', {
+        method: 'POST',
         body: formData
       });
-
-      const url = await res.text();
-      document.getElementById("result").innerHTML = `<a href="${url}" target="_blank">${url}</a>`;
-    }
+      const result = await response.text();
+      document.getElementById('result').innerHTML = `<a href="${result}" target="_blank">${result}</a>`;
+    });
   </script>
 </body>
 </html>
